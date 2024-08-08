@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Shopping Cart</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" />
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <section>
+        <div class="container">
+            <div class="cart">
+                <div class="col-md-12 col-lg-10 mx-auto">
+                    <div id="RemoveItem" class="cart-item removeItem">
+                        <div class="row">
+                            <div class="col-md-7 center-item">
+                                <img src="images/product-1.png" alt="">
+                                <h5>iPhone 11 128GB Black</h5>
+                            </div>
+
+                            <div class="col-md-5 center-item">
+                                <div class="input-group number-spinner">
+                                    <button id="minus-btn" class="btn btn-default"><i class="fas fa-minus"></i></button>
+                                    <input id="quantity" type="text" class="form-control text-center" value="1">
+                                    <button id="plus-btn" class="btn btn-default"><i class="fas fa-plus"></i></button>
+                                </div>
+                                <h5>$<span id="price">1219</span></h5>
+                                <img onclick="removeItems('RemoveItem')" src="images/remove.png" alt="" id="Remove" class="remove-item">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="SecondCardItem" class="cart-item removeItem">
+                        <div class="row">
+                            <div class="col-md-7 center-item mx-auto">
+                                <img src="images/product-2.png" alt="">
+                                <h5>iPhone 11 Silicone Case - Black</h5>
+                            </div>
+                            <div class="col-md-5 center-item">
+                                <div class="input-group number-spinner">
+                                    <button onclick=" iPhoneHandleProductChanger(false);" class="btn btn-default"><i class="fas fa-minus"></i></button>
+                                    <input id="iPhoneQuantity" type="text" class="form-control text-center" value="1">
+                                    <button onclick=" iPhoneHandleProductChanger(true);" class="btn btn-default"><i class="fas fa-plus"></i></button>
+
+                                </div>
+                                <h5>$<span id="iPhonePrice">59</span></h5>
+                                <img onclick="removeItems('SecondCardItem')" src="images/remove.png" alt=" " id="iPhoneRemove" class="remove-item">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cart-item">
+                        <div class="row">
+
+                            <div class="col-md-8">
+                                <h5>Subtotal: </h5>
+                                <h5>Tax:</h5>
+                                <h5>Total:</h5>
+                            </div>
+
+                            <div class="col-md-4 status">
+                                <h5>$<span id="TotalPriceCount">1,278</span></h5>
+                                <h5 id="tex-amount">$0</h5>
+                                <h5 id="final-amount">$1,278</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 pt-4 pb-4">
+                        <button onclick="feedbackText();" id="buy button" type="button" class="btn btn-success check-out">Check Out</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        //Plus button even handler
+        const plusBtn = document.getElementById("plus-btn");
+        plusBtn.addEventListener("click", function() {
+            handleProductChange(true);
+
+
+
+            //   getTotalPrice("price", totalNumber);
+
+        })
+        const minusBtn = document.getElementById("minus-btn");
+        minusBtn.addEventListener("click", function() {
+            handleProductChange(false);
+
+
+        });
+
+        /**     // Minus button even handler
+        const minusBtn = document.getElementById("minus-btn");
+        minusBtn.addEventListener("click", function() {
+
+            const Number = document.getElementById("quantity").value;
+            const Numbers = parseFloat(Number);
+            const current = Numbers;
+            const currentNumber = parseFloat(current);
+            const totalNumber = currentNumber - 1;
+            document.getElementById("quantity").value = totalNumber;
+            let totalPrice = totalNumber * 1219;
+            document.getElementById("price").innerText = "$"+totalPrice;
+
+            getTotalPrice("price", totalNumber * 1);
+        })
+*/
+
+        function handleProductChange(isInCrease) {
+            const Number = document.getElementById("quantity").value;
+            const Numbers = parseFloat(Number);
+            const current = Numbers;
+            const currentNumber = parseFloat(current);
+            let totalNumber = currentNumber;
+            if (isInCrease == true && totalNumber < 20) {
+                totalNumber = currentNumber + 1;
+            } else if (isInCrease == false && totalNumber > 0) {
+                totalNumber = currentNumber - 1;
+            }
+            document.getElementById("quantity").value = totalNumber;
+            const Count = totalNumber * 1219;
+            document.getElementById("price").innerText = Count;
+
+            calculateTotal();
+
+
+
+        }
+
+        function iPhoneHandleProductChanger(isInCrease) {
+            const Number = document.getElementById("iPhoneQuantity").value;
+            const Numbers = parseFloat(Number);
+            const current = Numbers;
+            const currentNumber = parseFloat(current);
+            let totalNumber = currentNumber;
+            if (isInCrease == true && totalNumber < 20) {
+                totalNumber = currentNumber + 1;
+            } else if (isInCrease == false && totalNumber > 0) {
+                totalNumber = currentNumber - 1;
+            }
+            document.getElementById("iPhoneQuantity").value = totalNumber;
+            const Count = totalNumber * 59;
+            document.getElementById("iPhonePrice").innerText = Count;
+
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            const phoneInput = document.getElementById("quantity");
+            const phoneCount = parseInt(phoneInput.value);
+
+            const caseInput = document.getElementById("iPhoneQuantity");
+            const caseCount = parseInt(caseInput.value);
+
+            const totalCount = phoneCount * 1219 + caseCount * 59;
+            document.getElementById("TotalPriceCount").innerText = totalCount;
+            const tex = Math.round(totalCount * 0.1);
+            document.getElementById("tex-amount").innerText = "$" + tex;
+
+            const finalAmount = totalCount + tex;
+            document.getElementById("final-amount").innerText = "$" + finalAmount;
+        }
+
+        function feedbackText() {
+            const feedback = document.write("Hey!go to shope for bye this products.I just had fun with you");
+            document.getElementById("buy button").innerText = feedback;
+        }
+
+
+        /**
+
+                //iPhone 11 Plus button even handler
+                const iPhone11PlusBtn = document.getElementById("iPhonePlus");
+                iPhone11PlusBtn.addEventListener("click", function() {
+
+                    const Number = document.getElementById("iPhoneQuantity").value;
+                    const Numbers = parseFloat(Number);
+                    const current = Numbers;
+                    const currentNumber = parseFloat(current);
+                    const totalNumber = 1 + currentNumber;
+                    document.getElementById("iPhoneQuantity").value = totalNumber;
+
+
+                    iPhoneTotalPrice("iPhon11Price", totalNumber);
+                })
+
+                //iPhone 11 Minus button even handler
+                const iPhone11MinusBtn = document.getElementById("iPhoneMinus");
+                iPhone11MinusBtn.addEventListener("click", function() {
+
+                    const Number = document.getElementById("iPhoneQuantity").value;
+                    const Numbers = parseFloat(Number);
+                    const current = Numbers;
+                    const currentNumber = parseFloat(current);
+                    const totalNumber = currentNumber - 1;
+                    document.getElementById("iPhoneQuantity").value = totalNumber;
+
+
+                    iPhoneTotalPrice("iPhon11Price", totalNumber * 1);
+
+                })
+
+                //Remove first card item even handler
+                const RemoveAllItem = document.getElementById("Remove");
+                RemoveAllItem.addEventListener("click", function() {
+                        const removeArea = removeItems("RemoveItem");
+                    })
+                    //Remove second card item even handler
+                const DeleteElement = document.getElementById("iPhoneRemove");
+                DeleteElement.addEventListener("click", function() {
+                    const Delete = removeItems("SecondCardItem");
+                })
+
+                const Subtotal = document.getElementById("currentPrice");
+                Subtotal.addEventListener("click", function() {
+                    const depositNumber = updateSubtotal()
+                })
+
+
+                /**                
+         const RemoveAllItem = document.getElementById("Remove");
+                RemoveAllItem.addEventListener("click", function() {
+                    const removeArea = document.getElementById("RemoveItem");
+                    removeArea.style.display = "none";
+
+                        const Number = document.getElementById("quantity").value;
+                        const Numbers = parseFloat(Number);
+                        const current = Numbers;
+                        const currentNumber = parseFloat(current);
+                        const totalNumber = 1 + currentNumber;
+                        document.getElementById("quantity").value = totalNumber;
+
+
+
+                        const productPrice = document.getElementById("price").innerText;
+                        const PriceAmount = parseFloat(productPrice);
+                        //console.log(PriceAmount);
+
+                        const Prices = PriceAmount;
+                        const currentPrice = parseFloat(Prices);
+                        const totalPrice = totalNumber * 1219;
+                        console.log(totalPrice);
+                        //  document.getElementById("price").innerHTML = totalPrice;
+                        //document.getElementById("price").innerText = totalPric
+
+                        
+                        
+
+
+                function getTotalPrice(id, totalNumber) {
+                    const productPrice = document.getElementById(id).innerText;
+                    const PriceAmount = parseFloat(productPrice);
+                    const Prices = PriceAmount;
+                    const currentPrice = parseFloat(Prices);
+                    const totalPrice = totalNumber * 1219;
+                    document.getElementById(id).innerText = totalPrice;
+                }
+
+                function iPhoneTotalPrice(id, totalNumber) {
+                    const productPrice = document.getElementById(id).innerText;
+                    const PriceAmount = parseFloat(productPrice);
+                    const Prices = PriceAmount;
+                    const currentPrice = parseFloat(Prices);
+                    const totalPrice = totalNumber * 59;
+                    document.getElementById(id).innerText = totalPrice;
+
+                }
+        */
+        function removeItems(id) {
+            const removeArea = document.getElementById(id);
+            removeArea.style.display = "none";
+            return removeArea;
+        }
+
+        function updateSubtotal(id, depositNumber) {
+            const current = document.getElementById(id).innerText;
+            const currentPrice = parseFloat(current);
+            const totalAmount = depositNumber + currentPrice;
+            document.getElementById(id).innerText = totalAmount;
+        }
+        /**
+        function PlusButton(id) {
+            const Number = document.getElementById(id).value;
+            const Numbers = parseFloat(Number);
+            const current = Numbers;
+            const currentNumber = parseFloat(current);
+            const totalNumber = 1 + currentNumber;
+            document.getElementById(id).value = totalNumber;
+        }
+        //Negative button even handler
+
+
+                  
+                        
+
+
+                     function getInputNumber(id) {
+                         const Amount = document.getElementById(id).value;
+                         const amountNumber = parseFloat(Amount);
+                         return amountNumber;
+                     }
+
+                     function updateSpanText(id, Quantity) {
+                         const current = document.getElementById(id).innerText;
+                         const currentNumber = parseFloat(current);
+                         const totalAmount = Quantity + currentNumber;
+                         document.getElementById(id).innerText = totalAmount;
+                     }
+                 */
+    </script>
+</body>
+
+</html>
